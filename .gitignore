@@ -1,0 +1,12 @@
+# Remix generated files
+artifacts/
+.states/
+
+# Dependencies
+node_modules/
+
+# Secrets
+.env
+
+# OS files
+.DS_Storewhat do 
