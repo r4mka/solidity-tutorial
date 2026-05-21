@@ -8,8 +8,13 @@ contract FundMe {
 
     uint256 public minUSD = 5e18; // we want all numbers to have 18 decimals
 
+    address public owner;
     address[] public funders;
     mapping(address funder => uint256 amountFunded) public addressToAmountFunded;
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     function fund() public payable {
         require(msg.value.getConversionRate() >= minUSD, "minimum contribution is 5 USD");
@@ -18,6 +23,8 @@ contract FundMe {
     }
 
     function withdraw() public {
+        require(msg.sender == owner, "Must be owner!");
+
         for (uint256 i = 0; i < funders.length; i++) {
             address funder = funders[i];
             addressToAmountFunded[funder] = 0;
