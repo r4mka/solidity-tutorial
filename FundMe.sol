@@ -14,6 +14,17 @@ contract FundMe {
     function fund() public payable {
         require(msg.value.getConversionRate() >= minUSD, "minimum contribution is 5 USD");
         funders.push(msg.sender);
-        addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
+        addressToAmountFunded[msg.sender] += msg.value;
+    }
+
+    function withdraw() public {
+        for (uint256 i = 0; i < funders.length; i++) {
+            address funder = funders[i];
+            addressToAmountFunded[funder] = 0;
+        }
+
+        funders = new address[](0);
+        (bool callSuccess, ) = payable(msg.sender).call{ value: address(this).balance }("");
+        require(callSuccess, "Call failed");
     }
 }
