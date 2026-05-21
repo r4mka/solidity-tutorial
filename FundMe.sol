@@ -7,9 +7,15 @@ contract FundMe {
     uint256 public minUSD = 5e18; // we want all numbers to have 18 decimals
     address private priceFeedETHUSD =
         0x694AA1769357215DE4FAC081bf1f309aDC325306;
+    address[] public funders;
+    mapping(address funder => uint256 amountFunded)
+        public addressToAmountFunded;
 
     function fund() public payable {
         require(msg.value >= minUSD, "minimum fund is 5 USD");
+        funders.push(msg.sender);
+        addressToAmountFunded[msg.sender] =
+            addressToAmountFunded[msg.sender] + msg.value;
     }
 
     function getPrice() public view returns (uint256) {
