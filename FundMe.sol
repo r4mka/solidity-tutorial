@@ -3,6 +3,8 @@ pragma solidity ^0.8.18;
 
 import { PriceConverter } from "./PriceConverter.sol";
 
+error NotOwner();
+
 /* 
     transaction costs:
     772,281 - initial 
@@ -44,7 +46,10 @@ contract FundMe {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == i_owner, "Sender is not owner!");
+        // require(msg.sender == i_owner, "Sender is not owner!");
+        if (msg.sender != i_owner) {
+            revert NotOwner();
+        }
         _;
     }
 }
